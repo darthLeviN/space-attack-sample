@@ -23,6 +23,10 @@ Files are listed by path:
 - `dev/interactive/show-all/show-all.gd` — gallery layout and preview logic.
 - `dev/interactive/show-all/show-all.tscn` — scrollable asset gallery; sound cards play previews.
 
+## Development plan
+
+- `devplan.md` — draft implementation checklist for the game flow, parallax background, pause menu, and controls HUD. Implement numbered tasks only when requested.
+
 ## Import and licensing
 
 - All PNGs are RGBA with transparent backgrounds. Place the star layers over a dark fill.
