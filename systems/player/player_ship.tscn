@@ -3,7 +3,7 @@
 [ext_resource type="Texture2D" path="res://assets/sprites/player/player-ship.png" id="1_ship"]
 [ext_resource type="Script" path="res://systems/player/player_ship.gd" id="2_script"]
 
-[node name="PlayerShip" type="Node2D"]
+[node name="PlayerShip" type="Node2D" groups=["player_ship"]]
 texture_filter = 1
 script = ExtResource("2_script")
 

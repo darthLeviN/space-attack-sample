@@ -26,14 +26,16 @@ Files are listed by path:
 - `dev/interactive/show-all/show-all.gd` — gallery layout and preview logic.
 - `dev/interactive/show-all/show-all.tscn` — scrollable asset gallery; sound cards play previews, and the background music card has start / stop controls.
 - `dev/interactive/parallax-background/parallax-background.tscn` — preview scene for `systems/background/parallax_background.tscn`.
-- `dev/interactive/player-ship/player-ship.tscn` — black-background preview for arrow-key ship movement and hold-to-fire with Space.
+- `dev/interactive/player-ship/player-ship.tscn` — black-background preview for arrow-key ship movement and hold-to-fire with Space; it adds the player health display directly to its own CanvasLayer.
 - `globals/game_state.gd` — active game state, including its optional `player_ship: PlayerShip` reference.
 
 ## Game systems
 
 - `systems/background/parallax_background.tscn` — reusable screen-space starfield with far and near parallax layers and an autostarting infinite drift animation.
-- `systems/player/player_ship.tscn` and `systems/player/player_ship.gd` — reusable `PlayerShip`; movement limits are constants, bullet speed and shots per second are exported tuning properties, shots use the `GameSFX` one-shot player, and the ship registers itself on `Globals.game_state.player_ship` when a game state exists.
+- `systems/player/player_ship.tscn` and `systems/player/player_ship.gd` — reusable `PlayerShip` in the `player_ship` group with `hp: int = 100` and static `damage_ship(amount: int)`; movement limits are constants, bullet speed and shots per second are exported tuning properties, shots use the `GameSFX` one-shot player, and the ship registers itself on `Globals.game_state.player_ship` when a game state exists.
 - `systems/projectiles/player_bullet.tscn` and `systems/projectiles/player_bullet.gd` — upward-moving player bullet with an Area2D collision shape and offscreen cleanup.
+- `ui/player-health-display.tscn` and `ui/player-health-display.gd` — reusable bottom-left HP display; it shows the first `player_ship` group member's HP or zero if none exists.
+- `ui/game_hud.tscn` — CanvasLayer HUD that instances the player health display.
 - `project.godot` — arrow-key movement actions and the `shoot` action bound to Space.
 - `systems/audio/default_bus_layout.tres` — project audio buses; `Music` and `GameSFX` route to `Master`.
 - `systems/audio/background_music.tscn` — autoplaying music-loop player assigned to the `Music` bus.

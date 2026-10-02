@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=3 format=3]
 
 [ext_resource type="PackedScene" path="res://systems/player/player_ship.tscn" id="1_player_ship"]
+[ext_resource type="PackedScene" path="res://ui/player-health-display.tscn" id="2_player_health"]
 
 [node name="PlayerShipCheck" type="Control"]
 layout_mode = 3
@@ -23,3 +24,7 @@ color = Color(0, 0, 0, 1)
 
 [node name="PlayerShip" parent="." instance=ExtResource("1_player_ship")]
 position = Vector2(960, 900)
+
+[node name="HudLayer" type="CanvasLayer" parent="."]
+
+[node name="PlayerHealthDisplay" parent="HudLayer" instance=ExtResource("2_player_health")]

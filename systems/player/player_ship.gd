@@ -24,6 +24,7 @@ var _held_actions := {
 
 @export_range(0.0, 2000.0, 25.0, "or_greater") var bullet_speed := 900.0
 @export_range(1.0, 20.0, 0.5, "or_greater") var shots_per_second := 5.0
+var hp: int = 100
 
 var _shoot_held := false
 var _shot_cooldown := 0.0
@@ -34,6 +35,18 @@ var _shot_cooldown := 0.0
 func _enter_tree() -> void:
 	if is_instance_valid(Globals.game_state):
 		Globals.game_state.player_ship = self
+
+
+static func damage_ship(amount: int) -> void:
+	if amount <= 0:
+		return
+	var scene_tree := Engine.get_main_loop() as SceneTree
+	if scene_tree == null:
+		return
+	var player_ship := scene_tree.get_first_node_in_group(&"player_ship") as PlayerShip
+	if player_ship == null:
+		return
+	player_ship.hp = maxi(0, player_ship.hp - amount)
 
 
 func _ready() -> void:
