@@ -12,12 +12,14 @@ var _remaining_enemy_count := 0
 var _is_ending := false
 
 
-func _ready() -> void:
-	_random.randomize()
+func _enter_tree() -> void:
 	if not is_instance_valid(Globals.game_state):
 		Globals.game_state = GameState.new()
 		Globals.add_child(Globals.game_state)
 
+
+func _ready() -> void:
+	_random.randomize()
 	Globals.player_ship_died.connect(_on_player_ship_died)
 	var difficulty := clampi(Globals.difficulty, 1, 10)
 	_spawner.spawn_root = _enemy_root

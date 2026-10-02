@@ -47,3 +47,5 @@ func end_game(reason: EndReason) -> void:
 		return
 	state = State.ENDED
 	end_reason = reason
+	if is_instance_valid(game_timer):
+		game_timer.running = false

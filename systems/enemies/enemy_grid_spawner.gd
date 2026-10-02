@@ -13,6 +13,28 @@ const ENEMY_SCENE: PackedScene = preload("res://systems/enemies/enemy.tscn")
 @export var grid_center := Vector2(960.0, 240.0)
 @export_range(48.0, 240.0, 1.0) var column_spacing := 112.0
 @export_range(48.0, 200.0, 1.0) var row_spacing := 88.0
+@export_range(0.25, 60.0, 0.25) var attack_interval_min := 4.0
+@export_range(0.25, 60.0, 0.25) var attack_interval_max := 8.0
+
+var _spawned_enemies: Array[Enemy] = []
+var _random := RandomNumberGenerator.new()
+var _attack_cooldown := 0.0
+
+
+func _ready() -> void:
+	_random.randomize()
+
+
+func _process(delta: float) -> void:
+	if _spawned_enemies.is_empty():
+		return
+
+	_attack_cooldown -= delta
+	if _attack_cooldown > 0.0:
+		return
+
+	_launch_next_attack()
+	_reset_attack_cooldown()
 
 
 func spawn_grid(difficulty: int) -> Array[Enemy]:
@@ -21,6 +43,7 @@ func spawn_grid(difficulty: int) -> Array[Enemy]:
 		push_warning("EnemyGridSpawner needs a spawn_root before spawn_grid() is called.")
 		return spawned_enemies
 
+	var was_empty := _spawned_enemies.is_empty()
 	var grid_size := _grid_size_for_difficulty(difficulty)
 	var row_count := grid_size.x
 	var column_count := grid_size.y
@@ -41,8 +64,31 @@ func spawn_grid(difficulty: int) -> Array[Enemy]:
 			)
 			spawn_root.add_child(enemy)
 			spawned_enemies.append(enemy)
+			_spawned_enemies.append(enemy)
+
+	if was_empty and not _spawned_enemies.is_empty():
+		_reset_attack_cooldown()
 
 	return spawned_enemies
+
+
+func _launch_next_attack() -> void:
+	var idle_enemies: Array[Enemy] = []
+	for enemy in _spawned_enemies:
+		if is_instance_valid(enemy) and enemy.can_start_attack():
+			idle_enemies.append(enemy)
+
+	if idle_enemies.is_empty():
+		return
+
+	var random_index := _random.randi_range(0, idle_enemies.size() - 1)
+	idle_enemies[random_index].start_attack()
+
+
+func _reset_attack_cooldown() -> void:
+	var low := minf(attack_interval_min, attack_interval_max)
+	var high := maxf(attack_interval_min, attack_interval_max)
+	_attack_cooldown = _random.randf_range(low, high)
 
 
 func _grid_size_for_difficulty(difficulty: int) -> Vector2i:

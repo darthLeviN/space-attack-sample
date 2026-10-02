@@ -158,11 +158,12 @@ func _update_attack_movement(delta: float) -> void:
 	var player := get_tree().get_first_node_in_group(&"player_ship") as Node2D
 	if player != null:
 		var to_player := player.global_position - global_position
-		if not to_player.is_zero_approx():
-			direction = to_player.normalized()
+		var downward_component := maxf(maxf(absf(to_player.x), to_player.y), 1.0)
+		direction = Vector2(to_player.x, downward_component).normalized()
 
 	global_position += direction * attack_speed * delta
-	if player == null and global_position.y > get_viewport_rect().end.y + 64.0:
+	var screen_bounds := get_viewport_rect().grow(32.0)
+	if not screen_bounds.has_point(global_position):
 		despawn()
 
 
