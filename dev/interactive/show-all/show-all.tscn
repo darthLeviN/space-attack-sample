@@ -1,13 +1,13 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene format=3 uid="uid://daudgdw84peg5"]
 
-[ext_resource type="Script" path="res://dev/interactive/show-all/show-all.gd" id="1_gallery"]
+[ext_resource type="Script" uid="uid://bsqfxlv542e72" path="res://dev/interactive/show-all/show-all.gd" id="1_gallery"]
 
-[node name="ShowAll" type="Control"]
+[node name="ShowAll" type="Control" unique_id=157833466]
+texture_filter = 1
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture_filter = 1
 script = ExtResource("1_gallery")

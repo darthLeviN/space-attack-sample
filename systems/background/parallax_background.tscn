@@ -17,7 +17,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0.0, 240.0),
 "transitions": PackedFloat32Array(1.0, 1.0),
 "update": 0,
-"values": [Vector2(0, 0), Vector2(0, -64)]
+"values": [Vector2(0, 0), Vector2(0, -256)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -29,7 +29,7 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0.0, 240.0),
 "transitions": PackedFloat32Array(1.0, 1.0),
 "update": 0,
-"values": [Vector2(0, 0), Vector2(0, -128)]
+"values": [Vector2(0, 0), Vector2(0, -512)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_drift"]
@@ -69,6 +69,7 @@ grow_vertical = 2
 texture_filter = 1
 expand_mode = 1
 stretch_mode = 1
+scale = Vector2(4, 4)
 texture = ExtResource("1_far_stars")
 modulate = Color(0.66, 0.78, 1, 0.7)
 mouse_filter = 2
@@ -83,6 +84,7 @@ grow_vertical = 2
 texture_filter = 1
 expand_mode = 1
 stretch_mode = 1
+scale = Vector2(4, 4)
 texture = ExtResource("2_near_stars")
 modulate = Color(1, 1, 1, 0.85)
 mouse_filter = 2
