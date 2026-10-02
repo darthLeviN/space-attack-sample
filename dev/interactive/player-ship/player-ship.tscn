@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=4 format=3]
 
 [ext_resource type="PackedScene" path="res://systems/player/player_ship.tscn" id="1_player_ship"]
 [ext_resource type="PackedScene" path="res://ui/player-health-display.tscn" id="2_player_health"]
+[ext_resource type="Script" path="res://dev/interactive/player-ship/player-ship.gd" id="3_script"]
 
 [node name="PlayerShipCheck" type="Control"]
 layout_mode = 3
@@ -11,6 +12,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 texture_filter = 1
+script = ExtResource("3_script")
 
 [node name="BlackBackground" type="ColorRect" parent="."]
 layout_mode = 1
@@ -28,3 +30,17 @@ position = Vector2(960, 900)
 [node name="HudLayer" type="CanvasLayer" parent="."]
 
 [node name="PlayerHealthDisplay" parent="HudLayer" instance=ExtResource("2_player_health")]
+
+[node name="DamageShipButton" type="Button" parent="HudLayer"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -244.0
+offset_top = 24.0
+offset_right = -24.0
+offset_bottom = 76.0
+grow_horizontal = 0
+grow_vertical = 0
+text = "Damage ship (-10 HP)"
+
+[connection signal="pressed" from="HudLayer/DamageShipButton" to="." method="_on_damage_ship_button_pressed"]

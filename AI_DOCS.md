@@ -26,7 +26,7 @@ Files are listed by path:
 - `dev/interactive/show-all/show-all.gd` — gallery layout and preview logic.
 - `dev/interactive/show-all/show-all.tscn` — scrollable asset gallery; sound cards play previews, and the background music card has start / stop controls.
 - `dev/interactive/parallax-background/parallax-background.tscn` — preview scene for `systems/background/parallax_background.tscn`.
-- `dev/interactive/player-ship/player-ship.tscn` — black-background preview for arrow-key ship movement and hold-to-fire with Space; it adds the player health display directly to its own CanvasLayer.
+- `dev/interactive/player-ship/player-ship.tscn` — black-background preview for arrow-key ship movement and hold-to-fire with Space; it adds the player health display and a dev-only “Damage ship (-10 HP)” button directly to its own CanvasLayer.
 - `globals/game_state.gd` — active game state, including its optional `player_ship: PlayerShip` reference.
 
 ## Game systems
