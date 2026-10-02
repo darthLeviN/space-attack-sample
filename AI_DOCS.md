@@ -23,6 +23,9 @@ Files are listed by path:
 - `dev/interactive/show-all/show-all.gd` — gallery layout and preview logic.
 - `dev/interactive/show-all/show-all.tscn` — scrollable asset gallery; sound cards play previews.
 - `dev/interactive/parallax-background/parallax-background.tscn` — reusable 1080p starfield background with far and near parallax layers; its AnimationPlayer autostarts a slow, infinitely looping drift.
+- `dev/interactive/player-ship/player-ship.tscn` — black-background preview for arrow-key ship movement.
+- `player_ship.tscn` and `player_ship.gd` — reusable player ship scene and `PlayerShip` movement script; movement limits and speed are constants in the script. The ship registers itself on `Globals.game_state.player_ship` when a game state exists.
+- `globals/game_state.gd` — active game state, including its optional `player_ship: PlayerShip` reference.
 
 ## Development plan
 
