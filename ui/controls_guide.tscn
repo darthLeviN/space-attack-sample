@@ -1,0 +1,17 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://ui/controls_guide.gd" id="1_script"]
+
+[node name="ControlsGuide" type="FlowContainer"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -550.0
+offset_top = 24.0
+offset_right = -28.0
+offset_bottom = 98.0
+alignment = 2
+theme_override_constants/h_separation = 18
+theme_override_constants/v_separation = 12
+mouse_filter = 2
+script = ExtResource("1_script")
