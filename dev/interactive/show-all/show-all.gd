@@ -19,7 +19,17 @@ const AUDIO_ASSETS := [
 	{"name": "Enemy destroyed", "path": "res://assets/audio/game/enemy-destroyed.ogg", "note": "Enemy hit / explosion"},
 ]
 
+const MUSIC_ASSET := {
+	"name": "Simple BGM Loop",
+	"path": "res://assets/audio/music/simple-bgm-loop.ogg",
+	"note": "Space / sci-fi background music · CC0",
+}
+const MUSIC_SCENE := preload("res://systems/audio/background_music.tscn")
+
 var audio_player: AudioStreamPlayer
+var music_player: AudioStreamPlayer
+var music_start_button: Button
+var music_stop_button: Button
 
 
 func _ready() -> void:
@@ -53,7 +63,7 @@ func _build_page() -> void:
 	page.add_child(title)
 
 	var intro := Label.new()
-	intro.text = "CC0 pixel-art sprites, two starfield layers, and sound previews. Scroll to browse."
+	intro.text = "CC0 pixel-art sprites, two starfield layers, and audio previews. Scroll to browse."
 	intro.add_theme_color_override("font_color", Color("#9fb7d1"))
 	page.add_child(intro)
 
@@ -70,6 +80,7 @@ func _build_page() -> void:
 	scroll.add_child(content)
 
 	_add_visual_section(content)
+	_add_music_section(content)
 	_add_audio_section(content)
 
 	audio_player = AudioStreamPlayer.new()
@@ -101,6 +112,17 @@ func _add_audio_section(parent: VBoxContainer) -> void:
 
 	for asset in AUDIO_ASSETS:
 		grid.add_child(_make_audio_card(asset))
+
+
+func _add_music_section(parent: VBoxContainer) -> void:
+	_add_section_title(parent, "BACKGROUND MUSIC  /  CC0")
+	var grid := GridContainer.new()
+	grid.columns = 3
+	grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	grid.add_theme_constant_override("h_separation", 12)
+	grid.add_theme_constant_override("v_separation", 12)
+	parent.add_child(grid)
+	grid.add_child(_make_music_card(MUSIC_ASSET))
 
 
 func _add_section_title(parent: VBoxContainer, text: String) -> void:
@@ -170,6 +192,42 @@ func _make_audio_card(asset: Dictionary) -> PanelContainer:
 	return card
 
 
+func _make_music_card(asset: Dictionary) -> PanelContainer:
+	var card := _make_card(Vector2(360, 138))
+	var stack := VBoxContainer.new()
+	stack.add_theme_constant_override("separation", 8)
+	card.add_child(stack)
+
+	var name := Label.new()
+	name.text = asset.name
+	name.add_theme_font_size_override("font_size", 16)
+	name.add_theme_color_override("font_color", Color("#e7f3ff"))
+	stack.add_child(name)
+
+	var note := Label.new()
+	note.text = asset.note
+	note.add_theme_color_override("font_color", Color("#9fb7d1"))
+	stack.add_child(note)
+
+	var controls := HBoxContainer.new()
+	controls.add_theme_constant_override("separation", 8)
+	stack.add_child(controls)
+
+	music_start_button = Button.new()
+	music_start_button.text = "START"
+	music_start_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	music_start_button.pressed.connect(_start_music)
+	controls.add_child(music_start_button)
+
+	music_stop_button = Button.new()
+	music_stop_button.text = "STOP"
+	music_stop_button.disabled = true
+	music_stop_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	music_stop_button.pressed.connect(_stop_music)
+	controls.add_child(music_stop_button)
+	return card
+
+
 func _make_card(minimum_size: Vector2) -> PanelContainer:
 	var card := PanelContainer.new()
 	card.custom_minimum_size = minimum_size
@@ -190,6 +248,28 @@ func _play_audio(path: String) -> void:
 	var stream := load(path) as AudioStream
 	if stream == null:
 		return
+	_stop_music()
 	audio_player.stop()
+	audio_player.bus = &"GameSFX"
 	audio_player.stream = stream
 	audio_player.play()
+
+
+func _start_music() -> void:
+	_stop_music()
+	audio_player.stop()
+	music_player = MUSIC_SCENE.instantiate() as AudioStreamPlayer
+	add_child(music_player)
+	music_start_button.disabled = true
+	music_stop_button.disabled = false
+
+
+func _stop_music() -> void:
+	if music_player != null:
+		music_player.stop()
+		music_player.queue_free()
+		music_player = null
+	if music_start_button != null:
+		music_start_button.disabled = false
+	if music_stop_button != null:
+		music_stop_button.disabled = true

@@ -19,6 +19,10 @@ run/main_scene="res://boot.tscn"
 
 Globals="*res://globals/globals.tscn"
 
+[audio]
+
+buses/default_bus_layout="res://systems/audio/default_bus_layout.tres"
+
 [display]
 
 window/size/viewport_width=1920
@@ -48,6 +52,11 @@ move_right={
 move_down={
 "deadzone": 0.5,
 "events": [Object(InputEventKey,"device":-1,"physical_keycode":4194322)
+]
+}
+shoot={
+"deadzone": 0.5,
+"events": [Object(InputEventKey,"device":-1,"physical_keycode":32)
 ]
 }
 

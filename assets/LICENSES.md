@@ -13,3 +13,7 @@ All selected assets below are free to use under CC0. The sound packs also includ
 ## Gameplay sounds
 
 - **Sci-fi Sounds** by Kenney. [Kenney source page](https://kenney.nl/assets/sci-fi-sounds). CC0. This project uses `laserRetro_000`, `laserLarge_000`, `impactMetal_000`, and `explosionCrunch_000`.
+
+## Background music
+
+- **Simple BGM Loop** by Theforeshadower. [OpenGameArt source page](https://opengameart.org/content/simple-bgm-loop). CC0. Downloaded as `assets/audio/music/simple-bgm-loop.ogg` for background music; credit is optional.

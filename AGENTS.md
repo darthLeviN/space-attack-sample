@@ -8,7 +8,7 @@ You may read up on [Dev Plan](./devplan.md)
 
 Assets are in the `./assets` folder
 
-We will add interactive development scenes in `dev/interactive` to run as scene in godot.
+Put reusable and production game implementations in `systems/` or `ui/`. Use `dev/interactive/` only for preview and test harness scenes that instance existing systems; do not put the only or primary implementation of a game system there.
 
 Use `memory.md` to store short notes when you need them.
 
