@@ -1,0 +1,16 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://ui/menu_text_button.gd" id="1_script"]
+
+[node name="MenuTextButton" type="Button"]
+custom_minimum_size = Vector2(420, 70)
+focus_mode = 2
+flat = true
+theme_override_colors/font_color = Color(0.72, 0.84, 0.98, 1)
+theme_override_colors/font_hover_color = Color(0.43, 0.91, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 0.83, 0.47, 1)
+theme_override_colors/font_focus_color = Color(0.43, 0.91, 1, 1)
+theme_override_colors/font_outline_color = Color(0.04, 0.1, 0.2, 1)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 34
+script = ExtResource("1_script")

@@ -31,7 +31,13 @@ func spawn_grid(difficulty: int) -> Array[Enemy]:
 				continue
 
 			var slot_index := row * column_count + column
-			enemy.set_idle_slot(slot_index, column_count, grid_center, column_spacing, row_spacing)
+			enemy.set_idle_slot(
+				slot_index,
+				column_count,
+				grid_center,
+				column_spacing,
+				row_spacing,
+			)
 			spawn_root.add_child(enemy)
 			spawned_enemies.append(enemy)
 

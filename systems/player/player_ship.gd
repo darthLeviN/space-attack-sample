@@ -61,6 +61,10 @@ static func damage_ship(amount: int) -> void:
 		player_ship._play_sfx(PLAYER_HIT_SOUND)
 
 
+func kill_from_enemy_attack() -> void:
+	PlayerShip.damage_ship(hp)
+
+
 func _ready() -> void:
 	set_process_unhandled_key_input(true)
 	global_position = global_position.clamp(MOVEMENT_MIN, MOVEMENT_MAX)
