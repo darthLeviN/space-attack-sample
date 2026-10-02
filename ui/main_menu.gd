@@ -107,8 +107,7 @@ func _update_difficulty_display() -> void:
 
 
 func _start_game() -> void:
-	# The game launch is intentionally a placeholder until the game scene is ready.
-	pass
+	Globals.start_game()
 
 
 func _quit_game() -> void:

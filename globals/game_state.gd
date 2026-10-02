@@ -1,11 +1,24 @@
 class_name GameState
 extends Node
 
+enum State {
+	RUNNING,
+	ENDED,
+}
+
+enum EndReason {
+	NONE,
+	PLAYER_DIED,
+	ENEMIES_CLEARED,
+}
+
 const GAME_TIMER_SCENE: PackedScene = preload("res://systems/game_timer.tscn")
 
 var player_ship: PlayerShip
 var score: int = 0
 var game_timer: GameTimer
+var state: State = State.RUNNING
+var end_reason: EndReason = EndReason.NONE
 
 
 func _enter_tree() -> void:
@@ -27,3 +40,10 @@ func _ready() -> void:
 	game_timer = GAME_TIMER_SCENE.instantiate() as GameTimer
 	if game_timer != null:
 		add_child(game_timer)
+
+
+func end_game(reason: EndReason) -> void:
+	if state == State.ENDED:
+		return
+	state = State.ENDED
+	end_reason = reason

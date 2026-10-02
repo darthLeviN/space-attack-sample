@@ -20,10 +20,10 @@ const ENEMY_SHOOT_SOUND: AudioStream = preload("res://assets/audio/game/enemy-sh
 
 @export var enemy_type: EnemyType = EnemyType.DEBUG
 @export var movement_mode: MovementMode = MovementMode.IDLE
-@export_range(1, 10, 1) var max_hp: int = 3
+@export_range(1, 10, 1) var max_hp: int = 2
 @export_range(0.0, 200.0, 1.0) var idle_sway_distance := 168.0
 @export_range(0.0, 2.0, 0.05) var idle_sway_speed := 0.5
-@export_range(60.0, 600.0, 10.0) var attack_speed := 240.0
+@export_range(30.0, 300.0, 10.0) var attack_speed := 120.0
 @export_range(0.25, 60.0, 0.25) var shot_interval_min := 10.0
 @export_range(0.25, 60.0, 0.25) var shot_interval_max := 24.0
 @export_range(50.0, 1200.0, 1.0) var enemy_bullet_speed := 166.6667
@@ -64,6 +64,10 @@ func start_attack() -> void:
 		return
 
 	movement_mode = MovementMode.ATTACKING
+
+
+func can_start_attack() -> bool:
+	return not _defeated and movement_mode == MovementMode.IDLE
 
 
 func set_idle_slot(

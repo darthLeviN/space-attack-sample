@@ -29,6 +29,7 @@ func spawn_grid(difficulty: int) -> Array[Enemy]:
 			var enemy := ENEMY_SCENE.instantiate() as Enemy
 			if enemy == null:
 				continue
+			enemy.enemy_type = Enemy.EnemyType.NORMAL
 
 			var slot_index := row * column_count + column
 			enemy.set_idle_slot(

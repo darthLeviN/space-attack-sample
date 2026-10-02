@@ -3,6 +3,7 @@ class_name GameOver
 
 @onready var _score_label: Label = $MenuStack/ScoreLabel
 @onready var _main_menu_button: Button = $MenuStack/MainMenuButton
+@onready var _title_label: Label = $MenuStack/Title
 
 
 func _enter_tree() -> void:
@@ -11,6 +12,7 @@ func _enter_tree() -> void:
 
 
 func _ready() -> void:
+	_title_label.text = _get_end_title()
 	_score_label.text = "SCORE: %d" % _get_current_score()
 	_main_menu_button.pressed.connect(_go_to_main_menu)
 	_main_menu_button.grab_focus()
@@ -28,6 +30,13 @@ func _get_current_score() -> int:
 	if not is_instance_valid(game_state) or not game_state.is_inside_tree():
 		game_state = get_tree().get_first_node_in_group(&"game_state") as GameState
 	return game_state.score if is_instance_valid(game_state) else 0
+
+
+func _get_end_title() -> String:
+	var game_state := Globals.game_state
+	if is_instance_valid(game_state) and game_state.end_reason == GameState.EndReason.ENEMIES_CLEARED:
+		return "SECTOR CLEARED"
+	return "GAME OVER"
 
 
 func _go_to_main_menu() -> void:
