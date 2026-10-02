@@ -25,27 +25,31 @@ Files are listed by path:
 
 - `dev/interactive/show-all/show-all.gd` — gallery layout and preview logic.
 - `dev/interactive/show-all/show-all.tscn` — scrollable asset gallery; sound cards play previews, and the background music card has start / stop controls.
-- `dev/interactive/parallax-background/parallax-background.tscn` — preview scene for `systems/background/parallax_background.tscn`.
+- `dev/interactive/parallax-background/parallax-background.tscn` and `parallax_background_preview.gd` — preview scene for the reusable parallax system, with X/Y sliders for checking the large-star layer offset from -1.0 to 1.0.
 - `dev/interactive/player-ship/player-ship.tscn` — black-background preview for arrow-key ship movement and hold-to-fire with Space; it adds the player health display and a dev-only “Damage ship (-10 HP)” button directly to its own CanvasLayer.
 - `globals/game_state.gd` — active game state, including its optional `player_ship: PlayerShip` reference.
 
 ## Game systems
 
-- `systems/background/parallax_background.tscn` — reusable screen-space starfield with far and near parallax layers and an autostarting infinite drift animation.
-- `systems/player/player_ship.tscn` and `systems/player/player_ship.gd` — reusable `PlayerShip` in the `player_ship` group with `hp: int = 100` and static `damage_ship(amount: int)`; movement limits are constants, bullet speed and shots per second are exported tuning properties, shots use the `GameSFX` one-shot player, and the ship registers itself on `Globals.game_state.player_ship` when a game state exists.
+- `systems/background/parallax_background.tscn` and `parallax_background.gd` — reusable screen-space starfield with separate autostarting infinite drift animations for each star layer, randomized startup offsets and animation phases, gently randomized speed scales, and an exported `big_stars_shift` vector for the near/big-star layer. The star textures are scaled 8× (512px tile spacing at the current assets' 64px size) to keep the repeated pattern sparse.
+- `systems/player/player_ship.tscn` and `systems/player/player_ship.gd` — reusable `PlayerShip` in the `player_ship` group with `hp: int = 100` and static `damage_ship(amount: int)`; route player damage through this method to update HP and play the player-hit sound. Movement limits are constants, bullet speed and shots per second are exported properties, shots use the `GameSFX` one-shot player, and the ship registers itself on `Globals.game_state.player_ship` when a game state exists.
 - `systems/projectiles/player_bullet.tscn` and `systems/projectiles/player_bullet.gd` — upward-moving player bullet with an Area2D collision shape and offscreen cleanup.
+- `systems/enemies/enemy.tscn` and `systems/enemies/enemy.gd` — reusable stationary enemy Area2D; exported DEBUG/NORMAL/ELITE type, configurable 1–10 HP (DEBUG always has 3), player bullets deal one damage and play impact feedback, defeated enemies play the explosion SFX and award one point to an available GameState, and `despawn()` removes an enemy without awarding score.
 - `ui/player-health-display.tscn` and `ui/player-health-display.gd` — reusable bottom-left HP display; it shows the first `player_ship` group member's HP or zero if none exists.
-- `ui/game_hud.tscn` — CanvasLayer HUD that instances the player health display.
+- `ui/score-display.tscn` and `ui/score-display.gd` — reusable score panel that shows the active GameState score or zero.
+- `ui/game_hud.tscn` — CanvasLayer HUD that instances the player health and score displays.
+- `dev/interactive/enemy/enemy-check.tscn` — enemy test harness with a button that fires the reusable moving player bullet at the enemy, a no-score respawn button, and the score display.
 - `project.godot` — arrow-key movement actions and the `shoot` action bound to Space.
 - `systems/audio/default_bus_layout.tres` — project audio buses; `Music` and `GameSFX` route to `Master`.
 - `systems/audio/background_music.tscn` — autoplaying music-loop player assigned to the `Music` bus.
-- `systems/audio/sfx_player.tscn` and `systems/audio/sfx_player.gd` — reusable one-shot player assigned to `GameSFX`; assign its `stream` before adding it to the scene tree. Example: `var sfx := preload("res://systems/audio/sfx_player.tscn").instantiate() as AudioStreamPlayer`, then set `sfx.stream` and call `add_child(sfx)`.
+- `systems/audio/sfx_player.tscn` and `systems/audio/sfx_player.gd` — reusable one-shot player assigned to `GameSFX`; assign its `stream` before adding it to the scene tree. Use this scene for all one-shot SFX; do not create `AudioStreamPlayer` nodes manually for SFX. Example: `var sfx := preload("res://systems/audio/sfx_player.tscn").instantiate() as AudioStreamPlayer`, then set `sfx.stream` and call `add_child(sfx)`.
 
 ## Development plan
 
 - `devplan.md` — draft implementation checklist for the game flow, parallax background, pause menu, and controls HUD. Implement numbered tasks only when requested.
 - Top-level `globals/`, `systems/`, and `ui/` directories are reserved for shared state, game systems, and interface assets/scripts. Keep production implementations there; `dev/interactive/` is for preview/test harnesses that instance them.
 - `globals/globals.tscn` is registered as the `Globals` autoload; `globals/globals.gd` owns the typed `game_state` reference.
+- `globals/game_state.gd` exposes `score: int = 0`, registers active instances in the `game_state` group, and assigns/clears the Globals reference when the slot is available.
 - `boot.tscn` is the project startup scene and changes to the empty `CanvasLayer` in `main_menu.tscn` from `boot.gd`.
 
 ## Import and licensing

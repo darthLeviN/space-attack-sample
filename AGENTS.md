@@ -10,6 +10,10 @@ Assets are in the `./assets` folder
 
 Put reusable and production game implementations in `systems/` or `ui/`. Use `dev/interactive/` only for preview and test harness scenes that instance existing systems; do not put the only or primary implementation of a game system there.
 
+For sound effects, use the reusable `systems/audio/sfx_player.tscn`: assign its `stream` before adding it to the scene tree. Do not create `AudioStreamPlayer` nodes manually for one-shot SFX.
+
+Apply player damage through `PlayerShip.damage_ship(amount)` rather than changing `hp` directly; the shared method updates HP and plays the player-hit SFX.
+
 Use `memory.md` to store short notes when you need them.
 
 Multiple agents will be running so don't get confused.

@@ -1,7 +1,10 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=3 format=3]
 
 [ext_resource type="PackedScene" path="res://ui/player-health-display.tscn" id="1_player_health"]
+[ext_resource type="PackedScene" path="res://ui/score-display.tscn" id="2_score_display"]
 
 [node name="GameHUD" type="CanvasLayer"]
 
 [node name="PlayerHealthDisplay" parent="." instance=ExtResource("1_player_health")]
+
+[node name="ScoreDisplay" parent="." instance=ExtResource("2_score_display")]

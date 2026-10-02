@@ -17,7 +17,10 @@ func _physics_process(delta: float) -> void:
 		queue_free()
 
 
-func _on_area_entered(_area: Area2D) -> void:
+func _on_area_entered(area: Area2D) -> void:
+	var enemy := area as Enemy
+	if enemy != null:
+		enemy.take_damage(1)
 	queue_free()
 
 

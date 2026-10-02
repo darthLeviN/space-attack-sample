@@ -4,6 +4,7 @@ class_name PlayerShip
 const PLAYER_BULLET_SCENE: PackedScene = preload("res://systems/projectiles/player_bullet.tscn")
 const SFX_PLAYER_SCENE: PackedScene = preload("res://systems/audio/sfx_player.tscn")
 const PLAYER_SHOOT_SOUND: AudioStream = preload("res://assets/audio/game/player-shoot.ogg")
+const PLAYER_HIT_SOUND: AudioStream = preload("res://assets/audio/game/player-hit.ogg")
 const MOVE_SPEED := 450.0
 const MOVEMENT_MIN := Vector2(32.0, 720.0)
 const MOVEMENT_MAX := Vector2(1888.0, 1016.0)
@@ -46,7 +47,11 @@ static func damage_ship(amount: int) -> void:
 	var player_ship := scene_tree.get_first_node_in_group(&"player_ship") as PlayerShip
 	if player_ship == null:
 		return
-	player_ship.hp = maxi(0, player_ship.hp - amount)
+	var new_hp := maxi(0, player_ship.hp - amount)
+	if new_hp == player_ship.hp:
+		return
+	player_ship.hp = new_hp
+	player_ship._play_sfx(PLAYER_HIT_SOUND)
 
 
 func _ready() -> void:
@@ -105,6 +110,13 @@ func _fire_bullet() -> void:
 	bullet_parent.add_child(bullet)
 	bullet.global_position = _sprite.to_global(Vector2(0.0, -_sprite.texture.get_height() / 2.0))
 
-	var shoot_sfx := SFX_PLAYER_SCENE.instantiate() as AudioStreamPlayer
-	shoot_sfx.stream = PLAYER_SHOOT_SOUND
-	bullet_parent.add_child(shoot_sfx)
+	_play_sfx(PLAYER_SHOOT_SOUND)
+
+
+func _play_sfx(stream: AudioStream) -> void:
+	var sfx_player := SFX_PLAYER_SCENE.instantiate() as AudioStreamPlayer
+	sfx_player.stream = stream
+	var sfx_parent := get_tree().current_scene
+	if sfx_parent == null:
+		sfx_parent = get_tree().root
+	sfx_parent.add_child(sfx_player)
