@@ -4,9 +4,9 @@
 
 Files are listed by path:
 
-- `assets/audio/game/enemy-destroyed.ogg` — enemy explosion.
+- `assets/audio/game/enemy-destroyed.ogg` — enemy explosion and player death sound.
 - `assets/audio/game/enemy-shoot.ogg` — enemy laser.
-- `assets/audio/game/player-hit.ogg` — player damage.
+- `assets/audio/game/player-hit.ogg` — player damage, using Kenney's heavy metal impact from the CC0 Impact Sounds pack.
 - `assets/audio/game/player-shoot.ogg` — player laser.
 - `assets/audio/music/simple-bgm-loop.ogg` — CC0 space / sci-fi background music loop.
 - `assets/audio/ui/button-click.ogg` — button click.
@@ -31,10 +31,11 @@ Files are listed by path:
 
 ## Game systems
 
-- `systems/background/parallax_background.tscn` and `parallax_background.gd` — reusable screen-space starfield with separate autostarting infinite drift animations for each star layer, randomized startup offsets and animation phases, gently randomized speed scales, and an exported `big_stars_shift` vector for the near/big-star layer. The star textures are scaled 8× (512px tile spacing at the current assets' 64px size) to keep the repeated pattern sparse.
-- `systems/player/player_ship.tscn` and `systems/player/player_ship.gd` — reusable `PlayerShip` in the `player_ship` group with `hp: int = 100` and static `damage_ship(amount: int)`; route player damage through this method to update HP and play the player-hit sound. Movement limits are constants, bullet speed and shots per second are exported properties, shots use the `GameSFX` one-shot player, and the ship registers itself on `Globals.game_state.player_ship` when a game state exists.
-- `systems/projectiles/player_bullet.tscn` and `systems/projectiles/player_bullet.gd` — upward-moving player bullet with an Area2D collision shape and offscreen cleanup.
-- `systems/enemies/enemy.tscn` and `systems/enemies/enemy.gd` — reusable stationary enemy Area2D; exported DEBUG/NORMAL/ELITE type, configurable 1–10 HP (DEBUG always has 3), player bullets deal one damage and play impact feedback, defeated enemies play the explosion SFX and award one point to an available GameState, and `despawn()` removes an enemy without awarding score.
+- `systems/background/parallax_background.tscn` and `parallax_background.gd` — reusable screen-space starfield with separate autostarting infinite drift animations for each star layer, randomized startup offsets and animation phases, gently randomized speed scales, and an exported `big_stars_shift` vector for the near/big-star layer. The star textures are scaled 4× (256px tile spacing at the current assets' 64px size).
+- `systems/player/player_ship.tscn` and `systems/player/player_ship.gd` — reusable `PlayerShip` in the `player_ship` group with `hp: int = 100` and static `damage_ship(amount: int)`; route player damage through this method to update HP and play the player-hit sound. At zero HP it stops accepting input, clears its `GameState` reference, plays its death sound, spawns the pixel explosion, and emits `Globals.player_ship_died`. Movement limits are constants, bullet speed and shots per second are exported properties, shots use the `GameSFX` one-shot player, and the ship registers itself on `Globals.game_state.player_ship` when a game state exists.
+- `systems/effects/player_ship_explosion.tscn` and `player_ship_explosion.gd` — short, procedural pixel burst used when the player dies.
+- `systems/projectiles/player_bullet.tscn` and `systems/projectiles/player_bullet.gd` — upward-moving player bullet with a collision rectangle matched to the visible sprite alpha bounds and offscreen cleanup.
+- `systems/enemies/enemy.tscn` and `systems/enemies/enemy.gd` — reusable stationary enemy Area2D with a collision rectangle matched to the visible sprite alpha bounds; exported DEBUG/NORMAL/ELITE type, configurable 1–10 HP (DEBUG always has 3), player bullets deal one damage and play impact feedback, defeated enemies play the explosion SFX and award one point to an available GameState, and `despawn()` removes an enemy without awarding score.
 - `ui/player-health-display.tscn` and `ui/player-health-display.gd` — reusable bottom-left HP display; it shows the first `player_ship` group member's HP or zero if none exists.
 - `ui/score-display.tscn` and `ui/score-display.gd` — reusable score panel that shows the active GameState score or zero.
 - `ui/game_hud.tscn` — CanvasLayer HUD that instances the player health and score displays.
@@ -49,6 +50,7 @@ Files are listed by path:
 - `devplan.md` — draft implementation checklist for the game flow, parallax background, pause menu, and controls HUD. Implement numbered tasks only when requested.
 - Top-level `globals/`, `systems/`, and `ui/` directories are reserved for shared state, game systems, and interface assets/scripts. Keep production implementations there; `dev/interactive/` is for preview/test harnesses that instance them.
 - `globals/globals.tscn` is registered as the `Globals` autoload; `globals/globals.gd` owns the typed `game_state` reference.
+- `globals/globals.gd` defines the global `player_ship_died` signal emitted when the player ship reaches zero HP.
 - `globals/game_state.gd` exposes `score: int = 0`, registers active instances in the `game_state` group, and assigns/clears the Globals reference when the slot is available.
 - `boot.tscn` is the project startup scene and changes to the empty `CanvasLayer` in `main_menu.tscn` from `boot.gd`.
 

@@ -1,7 +1,7 @@
 extends CanvasLayer
 class_name ParallaxBackgroundSystem
 
-const SCREEN_TILE_SIZE := 512.0
+const SCREEN_TILE_SIZE := 256.0
 const BASE_ANIMATION_LENGTH := 240.0
 const SPEED_TWEEN_DURATION := 1.5
 

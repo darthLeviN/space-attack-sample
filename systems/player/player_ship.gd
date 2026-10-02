@@ -3,11 +3,14 @@ class_name PlayerShip
 
 const PLAYER_BULLET_SCENE: PackedScene = preload("res://systems/projectiles/player_bullet.tscn")
 const SFX_PLAYER_SCENE: PackedScene = preload("res://systems/audio/sfx_player.tscn")
+const PLAYER_EXPLOSION_SCENE: PackedScene = preload("res://systems/effects/player_ship_explosion.tscn")
 const PLAYER_SHOOT_SOUND: AudioStream = preload("res://assets/audio/game/player-shoot.ogg")
 const PLAYER_HIT_SOUND: AudioStream = preload("res://assets/audio/game/player-hit.ogg")
+const PLAYER_DEATH_SOUND: AudioStream = preload("res://assets/audio/game/enemy-destroyed.ogg")
 const MOVE_SPEED := 450.0
 const MOVEMENT_MIN := Vector2(32.0, 720.0)
 const MOVEMENT_MAX := Vector2(1888.0, 1016.0)
+const DEATH_EFFECT_DURATION := 0.75
 const SHOOT_ACTION := &"shoot"
 const MOVEMENT_ACTIONS: Array[StringName] = [
 	&"move_left",
@@ -29,6 +32,7 @@ var hp: int = 100
 
 var _shoot_held := false
 var _shot_cooldown := 0.0
+var _is_dead := false
 
 @onready var _sprite: Sprite2D = $Sprite
 
@@ -51,7 +55,10 @@ static func damage_ship(amount: int) -> void:
 	if new_hp == player_ship.hp:
 		return
 	player_ship.hp = new_hp
-	player_ship._play_sfx(PLAYER_HIT_SOUND)
+	if new_hp == 0:
+		player_ship._die()
+	else:
+		player_ship._play_sfx(PLAYER_HIT_SOUND)
 
 
 func _ready() -> void:
@@ -59,7 +66,15 @@ func _ready() -> void:
 	global_position = global_position.clamp(MOVEMENT_MIN, MOVEMENT_MAX)
 
 
+func _exit_tree() -> void:
+	if is_instance_valid(Globals.game_state) and Globals.game_state.player_ship == self:
+		Globals.game_state.player_ship = null
+
+
 func _unhandled_key_input(event: InputEvent) -> void:
+	if _is_dead:
+		return
+
 	for action in MOVEMENT_ACTIONS:
 		if event.is_action_pressed(action):
 			_held_actions[action] = true
@@ -77,6 +92,9 @@ func _unhandled_key_input(event: InputEvent) -> void:
 
 
 func _process(delta: float) -> void:
+	if _is_dead:
+		return
+
 	var direction := Vector2(
 		float(_held_actions[&"move_right"]) - float(_held_actions[&"move_left"]),
 		float(_held_actions[&"move_down"]) - float(_held_actions[&"move_up"]),
@@ -113,10 +131,42 @@ func _fire_bullet() -> void:
 	_play_sfx(PLAYER_SHOOT_SOUND)
 
 
+func _die() -> void:
+	if _is_dead:
+		return
+
+	_is_dead = true
+	for action in _held_actions:
+		_held_actions[action] = false
+	_shoot_held = false
+	set_process(false)
+	set_process_unhandled_key_input(false)
+	remove_from_group(&"player_ship")
+	if is_instance_valid(Globals.game_state) and Globals.game_state.player_ship == self:
+		Globals.game_state.player_ship = null
+	if is_instance_valid(_sprite):
+		_sprite.hide()
+
+	var explosion := PLAYER_EXPLOSION_SCENE.instantiate() as Node2D
+	if explosion != null:
+		var effect_parent := _get_effect_parent()
+		effect_parent.add_child(explosion)
+		explosion.global_position = global_position
+
+	_play_sfx(PLAYER_DEATH_SOUND)
+	Globals.player_ship_died.emit()
+	get_tree().create_timer(DEATH_EFFECT_DURATION).timeout.connect(queue_free)
+
+
 func _play_sfx(stream: AudioStream) -> void:
 	var sfx_player := SFX_PLAYER_SCENE.instantiate() as AudioStreamPlayer
 	sfx_player.stream = stream
-	var sfx_parent := get_tree().current_scene
-	if sfx_parent == null:
-		sfx_parent = get_tree().root
+	var sfx_parent := _get_effect_parent()
 	sfx_parent.add_child(sfx_player)
+
+
+func _get_effect_parent() -> Node:
+	var effect_parent: Node = get_tree().current_scene
+	if effect_parent == null or effect_parent == self or is_ancestor_of(effect_parent):
+		return get_tree().root
+	return effect_parent

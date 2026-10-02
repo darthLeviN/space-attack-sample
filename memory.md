@@ -8,5 +8,5 @@
 
 ## Parallax background tuning (2026-10-03)
 
-- The user found the 256px repeated star tile too dense. Keep the existing 64px star textures at 8× scale (512px tile spacing) unless asked to retune density.
+- The user first found 256px repeated star tiles too dense, then found the 512px version too large and asked to double the tiling. Current preference: 4× scale on 64px star textures (256px tile spacing).
 - Keep the parallax implementation under `systems/background/`; `dev/interactive/parallax-background/` only instances it and provides preview controls.
