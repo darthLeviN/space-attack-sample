@@ -1,20 +1,20 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene format=3 uid="uid://c64v8bncakn2w"]
 
-[ext_resource type="Script" path="res://dev/interactive/enemy/enemy-movement-check.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://b08ssel2xahrs" path="res://dev/interactive/enemy/enemy-movement-check.gd" id="1_script"]
 [ext_resource type="PackedScene" path="res://systems/game_timer.tscn" id="2_game_timer"]
 [ext_resource type="PackedScene" path="res://systems/enemies/enemy_grid_spawner.tscn" id="3_enemy_spawner"]
 
-[node name="EnemyMovementCheck" type="Control"]
+[node name="EnemyMovementCheck" type="Control" unique_id=227585376]
+texture_filter = 1
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture_filter = 1
 script = ExtResource("1_script")
 
-[node name="BlackBackground" type="ColorRect" parent="."]
+[node name="BlackBackground" type="ColorRect" parent="." unique_id=840778540]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -24,15 +24,15 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0, 0, 0, 1)
 
-[node name="GameTimer" parent="." instance=ExtResource("2_game_timer")]
+[node name="GameTimer" parent="." unique_id=1982578214 instance=ExtResource("2_game_timer")]
 
-[node name="EnemyRoot" type="Node2D" parent="."]
+[node name="EnemyRoot" type="Node2D" parent="." unique_id=2037246401]
 
-[node name="EnemyGridSpawner" parent="." instance=ExtResource("3_enemy_spawner")]
+[node name="EnemyGridSpawner" parent="." unique_id=548448390 instance=ExtResource("3_enemy_spawner")]
 
-[node name="HudLayer" type="CanvasLayer" parent="."]
+[node name="HudLayer" type="CanvasLayer" parent="." unique_id=1401526229]
 
-[node name="AttackNextButton" type="Button" parent="HudLayer"]
+[node name="AttackNextButton" type="Button" parent="HudLayer" unique_id=611376560]
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0

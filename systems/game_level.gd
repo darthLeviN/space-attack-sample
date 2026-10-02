@@ -1,6 +1,6 @@
 extends Node2D
 
-const GAME_OVER_SCENE := "res://ui/game_over.tscn"
+const GAME_OVER_SCENE: PackedScene = preload("res://ui/game_over.tscn")
 const PLAYER_DEATH_DELAY := 0.9
 
 @onready var _enemy_root: Node2D = $EnemyFormation
@@ -86,4 +86,4 @@ func _finish_game(reason: GameState.EndReason, delay: float = 0.0) -> void:
 	if delay > 0.0:
 		await get_tree().create_timer(delay).timeout
 	if is_inside_tree():
-		get_tree().call_deferred("change_scene_to_file", GAME_OVER_SCENE)
+		add_child(GAME_OVER_SCENE.instantiate())

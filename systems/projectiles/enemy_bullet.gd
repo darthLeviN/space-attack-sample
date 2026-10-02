@@ -2,6 +2,7 @@ extends Area2D
 class_name EnemyBullet
 
 const DESPAWN_MARGIN := 64.0
+const PLAYER_DAMAGE := 20
 
 @export_range(50.0, 1200.0, 1.0) var speed := 166.6667
 
@@ -15,7 +16,5 @@ func _physics_process(delta: float) -> void:
 
 func _on_area_entered(area: Area2D) -> void:
 	if area.is_in_group(&"player_hurtbox"):
-		var player := area.get_parent()
-		if player != null and player.has_method("kill_from_enemy_attack"):
-			player.call("kill_from_enemy_attack")
+		PlayerShip.damage_ship(PLAYER_DAMAGE)
 	queue_free()

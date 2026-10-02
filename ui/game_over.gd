@@ -1,4 +1,4 @@
-extends Control
+extends CanvasLayer
 class_name GameOver
 
 @onready var _score_label: Label = $MenuStack/ScoreLabel
