@@ -6,7 +6,7 @@ Files are listed by path:
 
 - `assets/audio/game/enemy-destroyed.ogg` — enemy explosion and player death sound.
 - `assets/audio/game/enemy-shoot.ogg` — enemy laser.
-- `assets/audio/game/player-hit.ogg` — player damage, using Kenney's heavy metal impact from the CC0 Impact Sounds pack.
+- `assets/audio/game/player-hit.ogg` — player damage, sourced from GreyFrogGames' CC0 Player Hit (damage) sound on OpenGameArt.
 - `assets/audio/game/player-shoot.ogg` — player laser.
 - `assets/audio/music/simple-bgm-loop.ogg` — CC0 space / sci-fi background music loop.
 - `assets/audio/ui/button-click.ogg` — button click.
@@ -35,7 +35,10 @@ Files are listed by path:
 - `systems/player/player_ship.tscn` and `systems/player/player_ship.gd` — reusable `PlayerShip` in the `player_ship` group with `hp: int = 100` and static `damage_ship(amount: int)`; route player damage through this method to update HP and play the player-hit sound. At zero HP it stops accepting input, clears its `GameState` reference, plays its death sound, spawns the pixel explosion, and emits `Globals.player_ship_died`. Movement limits are constants, bullet speed and shots per second are exported properties, shots use the `GameSFX` one-shot player, and the ship registers itself on `Globals.game_state.player_ship` when a game state exists.
 - `systems/effects/player_ship_explosion.tscn` and `player_ship_explosion.gd` — short, procedural pixel burst used when the player dies.
 - `systems/projectiles/player_bullet.tscn` and `systems/projectiles/player_bullet.gd` — upward-moving player bullet with a collision rectangle matched to the visible sprite alpha bounds and offscreen cleanup.
-- `systems/enemies/enemy.tscn` and `systems/enemies/enemy.gd` — reusable stationary enemy Area2D with a collision rectangle matched to the visible sprite alpha bounds; exported DEBUG/NORMAL/ELITE type, configurable 1–10 HP (DEBUG always has 3), player bullets deal one damage and play impact feedback, defeated enemies play the explosion SFX and award one point to an available GameState, and `despawn()` removes an enemy without awarding score.
+- `systems/game_timer.tscn` and `systems/game_timer.gd` — shared elapsed-time clock in the `game_timer` group; GameState creates it as a child, and standalone previews may instance it directly.
+- `systems/enemies/enemy.tscn` and `systems/enemies/enemy.gd` — reusable enemy Area2D with a collision rectangle matched to the visible sprite alpha bounds; exported DEBUG/NORMAL/ELITE type and IDLE/ATTACKING movement mode, configurable 1–10 HP (DEBUG always has 3), and synchronized slow left-right idle movement driven by its slot position and the first GameTimer. Player bullets deal one damage and play impact feedback; defeated enemies play the explosion SFX and award one point to an available GameState; `despawn()` removes an enemy without awarding score.
+- `systems/enemies/enemy_grid_spawner.tscn` and `systems/enemies/enemy_grid_spawner.gd` — reusable grid spawner with exported `spawn_root` and `spawn_grid(difficulty)`; EASY, NORMAL, and HARD create progressively larger grids and assign stable slot indices.
+- `dev/interactive/enemy/enemy-movement-check.tscn` — idle formation preview with its own GameTimer, no GameState, and an unconnected “Attack Next” placeholder button.
 - `ui/player-health-display.tscn` and `ui/player-health-display.gd` — reusable bottom-left HP display; it shows the first `player_ship` group member's HP or zero if none exists.
 - `ui/score-display.tscn` and `ui/score-display.gd` — reusable score panel that shows the active GameState score or zero.
 - `ui/game_hud.tscn` — CanvasLayer HUD that instances the player health and score displays.

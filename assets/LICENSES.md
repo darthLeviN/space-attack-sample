@@ -13,7 +13,7 @@ All selected assets below are free to use under CC0. The sound packs also includ
 ## Gameplay sounds
 
 - **Sci-fi Sounds** by Kenney. [Kenney source page](https://kenney.nl/assets/sci-fi-sounds). CC0. This project uses `laserRetro_000`, `laserLarge_000`, `impactMetal_000`, and `explosionCrunch_000`.
-- **Impact Sounds** by Kenney. [Kenney source page](https://kenney.nl/assets/impact-sounds). CC0. This project uses `impactMetal_heavy_001` for the player's damage sound.
+- **Player Hit (damage)** by GreyFrogGames. [OpenGameArt source page](https://opengameart.org/content/player-hit-damage). CC0. The clip is normalized for use as the player's damage sound.
 
 ## Background music
 
